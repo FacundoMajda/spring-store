@@ -1,7 +1,7 @@
-package com.example.demo.user;
+package com.springstore.user;
 
-import com.example.demo.user.dto.UserRequest;
-import com.example.demo.user.dto.UserResponse;
+import com.springstore.user.dto.UserRequest;
+import com.springstore.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

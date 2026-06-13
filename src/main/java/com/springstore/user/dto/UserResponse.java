@@ -1,6 +1,6 @@
-package com.example.demo.user.dto;
+package com.springstore.user.dto;
 
-import com.example.demo.user.Role;
+import com.springstore.user.Role;
 import java.time.LocalDateTime;
 
 public record UserResponse(

@@ -1,4 +1,4 @@
-package com.example.demo.user;
+package com.springstore.user;
 
 public enum Role {
     USER,
