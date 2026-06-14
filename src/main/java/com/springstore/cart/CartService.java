@@ -106,7 +106,7 @@ public class CartService {
         return toResponse(cart, items);
     }
 
-    Cart findOrCreateCart(Long userId) {
+    public Cart findOrCreateCart(Long userId) {
         return cartRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     var user = userRepository.getReferenceById(userId);
