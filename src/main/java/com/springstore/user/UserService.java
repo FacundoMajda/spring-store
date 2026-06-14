@@ -3,18 +3,21 @@ package com.springstore.user;
 import com.springstore.user.dto.UserRequest;
 import com.springstore.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public UserResponse create(UserRequest req) {
         if (userRepository.existsByEmail(req.email())) {
             throw new RuntimeException("Email already in use");
@@ -31,10 +34,8 @@ public class UserService {
         return toResponse(user);
     }
 
-    public List<UserResponse> findAll() {
-        return userRepository.findAll().stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<UserResponse> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(this::toResponse);
     }
 
     public UserResponse findById(Long id) {

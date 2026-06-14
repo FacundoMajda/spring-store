@@ -45,14 +45,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntime(RuntimeException ex) {
         var message = ex.getMessage();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        HttpStatus status;
-        if (message != null && message.contains("not found")) {
-            status = HttpStatus.NOT_FOUND;
-        } else if (message != null && (message.contains("already in use") || message.contains("empty"))) {
-            status = HttpStatus.CONFLICT;
-        } else {
-            status = HttpStatus.BAD_REQUEST;
+        if (message != null) {
+            if (message.contains("not found") || message.contains("does not belong")) {
+                status = HttpStatus.NOT_FOUND;
+            } else if (message.contains("already in use") || message.contains("Insufficient stock")) {
+                status = HttpStatus.CONFLICT;
+            } else if (message.contains("Cart is empty")) {
+                status = HttpStatus.BAD_REQUEST;
+            }
         }
 
         return ResponseEntity.status(status).body(new ErrorResponse(

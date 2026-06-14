@@ -7,12 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -36,10 +37,10 @@ public class OrderController {
     }
 
     @GetMapping
-    @Operation(summary = "List user orders", description = "Returns all orders for the authenticated user")
-    public ResponseEntity<List<OrderResponse>> findAll(Authentication auth) {
+    @Operation(summary = "List user orders", description = "Returns a paginated list of orders for the authenticated user")
+    public ResponseEntity<Page<OrderResponse>> findAll(Authentication auth, @ParameterObject Pageable pageable) {
         var userId = (Long) auth.getPrincipal();
-        return ResponseEntity.ok(orderService.findAllByUserId(userId));
+        return ResponseEntity.ok(orderService.findAllByUserId(userId, pageable));
     }
 
     @GetMapping("/{id}")

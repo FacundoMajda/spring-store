@@ -9,11 +9,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -24,9 +25,9 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    @Operation(summary = "List all products", description = "Returns the full product catalog. Public endpoint.")
-    public ResponseEntity<List<ProductResponse>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+    @Operation(summary = "List all products", description = "Returns a paginated product catalog. Public endpoint.")
+    public ResponseEntity<Page<ProductResponse>> findAll(@ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(productService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

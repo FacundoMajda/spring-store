@@ -9,11 +9,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,13 +26,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @Operation(summary = "List all users", description = "Requires ADMIN role")
+    @Operation(summary = "List all users", description = "Returns a paginated list. Requires ADMIN role.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User list returned"),
             @ApiResponse(responseCode = "403", description = "Forbidden — ADMIN role required")
     })
-    public ResponseEntity<List<UserResponse>> findAll() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<Page<UserResponse>> findAll(@ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(userService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

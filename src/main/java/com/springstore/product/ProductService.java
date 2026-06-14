@@ -3,21 +3,20 @@ package com.springstore.product;
 import com.springstore.product.dto.ProductRequest;
 import com.springstore.product.dto.ProductResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<ProductResponse> findAll() {
-        return productRepository.findAll().stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<ProductResponse> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable).map(this::toResponse);
     }
 
     public ProductResponse findById(Long id) {

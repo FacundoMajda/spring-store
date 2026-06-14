@@ -20,6 +20,7 @@ public class CartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public CartResponse getCart(Long userId) {
         var cart = findOrCreateCart(userId);
         var items = cartItemRepository.findByCartId(cart.getId());
@@ -105,6 +106,7 @@ public class CartService {
         return toResponse(cart, items);
     }
 
+    @Transactional
     public Cart findOrCreateCart(Long userId) {
         return cartRepository.findByUserId(userId)
                 .orElseGet(() -> {

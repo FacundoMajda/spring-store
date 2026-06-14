@@ -7,6 +7,8 @@ import com.springstore.product.Product;
 import com.springstore.product.ProductRepository;
 import com.springstore.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -86,13 +89,12 @@ public class OrderService {
         return toResponse(order, items);
     }
 
-    public List<OrderResponse> findAllByUserId(Long userId) {
-        return orderRepository.findByUserIdOrderByCreatedAtDesc(userId).stream()
+    public Page<OrderResponse> findAllByUserId(Long userId, Pageable pageable) {
+        return orderRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable)
                 .map(order -> {
                     var items = orderItemRepository.findByOrderId(order.getId());
                     return toResponse(order, items);
-                })
-                .toList();
+                });
     }
 
     public OrderResponse findById(Long orderId, Long userId) {
