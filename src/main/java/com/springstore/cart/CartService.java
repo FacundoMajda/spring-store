@@ -4,7 +4,6 @@ import com.springstore.cart.dto.AddCartItemRequest;
 import com.springstore.cart.dto.CartResponse;
 import com.springstore.cart.dto.UpdateCartItemRequest;
 import com.springstore.product.ProductRepository;
-import com.springstore.user.User;
 import com.springstore.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
